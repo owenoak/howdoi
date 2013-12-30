@@ -1,0 +1,50 @@
+<!-- router layout -->
+<template name="pageLayout">
+	<div class="container">
+		{{> pageHeader}}
+		{{> pageErrors}}
+		<div id="main" class="row-fluid">
+			{{yield}}
+		</div>
+	</div>
+</template>
+
+<!-- page header -->
+<template name="pageHeader">
+	<header class="navbar">
+		<div class="navbar-inner">
+			<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</a>
+			<a class="brand" href="{{pathFor 'showQuestions'}}">HowDoI?</a>
+			{{#if currentUser}}
+				<ul class="nav">
+					<li><a href="{{pathFor 'askQuestion'}}">Ask away...</a></li>
+				</ul>
+			{{/if}}
+			<ul class="nav pull-right">
+				<li>{{loginButtons}}</li>
+			</ul>
+		</div>
+	</header>
+</template>
+
+<!-- loading template -->
+<template name="loading">
+	<!-- NOTE: spinner comes from "spin" package:  ">mrt add spin" -->
+	{{> spinner}}
+</template>
+
+
+<!-- please log in -->
+<template name="pleaseLogIn">
+	<div class="alert alert-error">Please log in to continue.</div>
+</template>
+
+<!-- body of the html page -->
+<head>
+	<title>HowDoI?</title>
+</head>
+<body></body>

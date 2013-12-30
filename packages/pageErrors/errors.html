@@ -1,0 +1,18 @@
+
+
+<!-- page errors template -->
+<template name="pageErrors">
+	<div class="errors row-fluid">
+	{{#each errors}}
+		{{> pageError}}
+	{{/each}}
+	</div>
+</template>
+
+<!-- single error template -->
+<template name="pageError">
+	<div class="alert alert-error">
+		<button type="button" class="close" data-dismiss="alert">&times;</button>
+		{{message}}
+	</div>
+</template>

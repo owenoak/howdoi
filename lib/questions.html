@@ -1,0 +1,115 @@
+<!-- page:  list of all questions -->
+<template name="showQuestions">
+	<div class="questions">
+		{{#each questions}}
+			{{> questionItem}}
+		{{/each}}
+	</div>
+</template>
+
+
+<!-- page:  individual question display -->
+<template name="showQuestion">
+	{{> questionItem}}
+	<ul class="answers">
+		{{#each answers}}
+			{{> answerItem}}
+		{{/each}}
+	</ul>
+	{{> addAnswer}}
+</template>
+
+
+<!-- list item:  individual question -->
+<template name="questionItem">
+	<div class="question" id="{{_id}}" userid="{{userId}}">
+		<div class="question-actions">
+			{{#if isMyPost}}
+				<button class="editBtn btn" onclick="Router.go('{{pathFor 'editQuestion' this}}')">Edit</button>
+				{{#autoForm schema="EditQuestion" doc=this}}
+					<button type="submit" class="deleteBtn btn btn-danger remove">Delete</button>
+				{{/autoForm}}
+			{{/if}}
+		</div>
+		<div class="question-content">
+			<h3><a class="question-text" href="{{pathFor "showQuestion"}}">{{question}}</a>
+				<span class="author">{{author}} asked</span>
+				<span class="date">{{date}}</span>
+			</h3>
+			<span class="tags hiding" title="{{tags}}">{{{tagPills}}}</span>
+			<span class="answer-count">({{answerCount}})</span>
+		</div>
+	</div>
+</template>
+
+<!-- list item:  individual answer -->
+<template name="answerItem">
+	<li>
+		<h4>
+			<span class="author">{{author}}</span>
+			<span class="date">answered {{date}}</span>
+		</h4>
+		<p>{{answer}}</p>
+	</li>
+</template>
+
+
+
+<!-- page: ask a new question form -->
+<template name="askQuestion">
+    {{#autoForm schema="AskQuestion" id="askQuestion" class="questionForm"}}
+    <fieldset>
+        <legend>What's on your mind?</legend>
+	    {{afQuickField 'question' autofocus=''}}
+	    {{afQuickField 'tags'}}
+	</fieldset>
+	<fieldset class='toolbar'>
+	    <button type="submit" class="saveBtn btn btn-primary insert">Save</button>
+	    <button type="reset" onclick="AskQuestion.cancel('showQuestions')" class="cancelBtn btn cancel">Cancel</button>
+	</fieldset>
+	{{/autoForm}}
+</template>
+
+
+
+<!-- page: edit a question form -->
+<template name="editQuestion">
+    {{#autoForm schema="EditQuestion" id="editQuestion" doc=this class="questionForm"}}
+    <fieldset>
+        <legend>Changing your mind?</legend>
+	    {{afQuickField 'question' autofocus=''}}
+	    {{afQuickField 'tags'}}
+	</fieldset>
+	<fieldset class='toolbar'>
+	    <button type="submit" class="saveBtn btn btn-primary update">Save</button>
+	    <button type="reset" onclick="EditQuestion.cancel('showQuestions')" class="cancelBtn btn">Cancel</button>
+	    <button type="submit" class="deleteBtn btn btn-danger remove">Delete Question</button>
+	</fieldset>
+	{{/autoForm}}
+</template>
+
+
+<!-- panel: add an answer form -->
+<template name="addAnswer">
+	{{#if currentUser}}
+		{{#autoForm schema="AddAnswer" id="addAnswer" doc=this class="answerForm"}}
+			<fieldset>
+				<legend>Your opinion?</legend>
+				<div class="form-group{{#if afFieldIsInvalid 'answer'}} has-error{{/if}}">
+					{{afFieldInput "answer" rows=5}}
+					{{#if afFieldIsInvalid "answer"}}
+					<span class="help-block">{{afFieldMessage "answer"}}</span>
+					{{/if}}
+				</div>
+			</fieldset>
+			<fieldset class='toolbar'>
+				<button type="submit" class="saveBtn btn update">Answer</button>
+				<button type="reset" class="cancelBtn btn">Nevermind</button>
+			</fieldset>
+		{{/autoForm}}
+	{{else}}
+		<p class='answerForm'>Please log in to answer.</p>
+	{{/if}}
+
+</template>
+
